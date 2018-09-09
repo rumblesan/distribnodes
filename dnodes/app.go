@@ -56,6 +56,11 @@ func (app *DNodesApp) AddNode(id string, address string) error {
 	app.AppMutex.Lock()
 	defer app.AppMutex.Unlock()
 
+	if id == app.Self.ID {
+		log.Println("Aware of self")
+		return nil
+	}
+
 	_, prs := app.NodeList[id]
 	if prs {
 		log.Printf("Node %s already known about\n", id)
@@ -105,9 +110,13 @@ func (app *DNodesApp) RemoveNode(id string) error {
 	app.AppMutex.Lock()
 	defer app.AppMutex.Unlock()
 
-	_, prs := app.NodeList[id]
+	ns, prs := app.NodeList[id]
 	if !prs {
 		return fmt.Errorf("no node with ID %s", id)
+	}
+	err := ns.Client.Close()
+	if err != nil {
+		log.Println(err)
 	}
 	delete(app.NodeList, id)
 	return nil

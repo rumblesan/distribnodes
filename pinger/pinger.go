@@ -13,21 +13,29 @@ import (
 func Start(app *dnodes.DNodesApp, cfg *config.AppConfig) *time.Ticker {
 	t := time.NewTicker(cfg.PingDuration)
 
-	go Pinger(app, t)
+	go Pinger(app, cfg, t)
 
 	return t
 }
 
 // Pinger handles sending Ping messages to remote nodes
-func Pinger(app *dnodes.DNodesApp, ticker *time.Ticker) {
-	for t := range ticker.C {
-		log.Printf("%s - Pinging Nodes\n", t)
+func Pinger(app *dnodes.DNodesApp, cfg *config.AppConfig, ticker *time.Ticker) {
+	for range ticker.C {
+		log.Printf("Pinging Nodes\n")
 
 		nodeList := app.GetRemoteNodeList()
-		for _, node := range nodeList {
-			err := PingNode(app, node)
+		for _, nodeState := range nodeList {
+			err := PingNode(app, nodeState)
 			if err != nil {
 				log.Println(err)
+				if nodeState.Seen.Add(cfg.TimeToLive).Before(time.Now()) {
+					log.Printf("Removing node %s from nodelist\n", nodeState.Node.ID)
+					log.Printf("     Last seen %s\n", nodeState.Seen)
+					err := app.RemoveNode(nodeState.Node.ID)
+					if err != nil {
+						log.Println(err)
+					}
+				}
 			}
 		}
 	}

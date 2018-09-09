@@ -29,7 +29,7 @@ type Pong struct {
 
 // PingNodeRPC handles a Ping RPC from a node
 func (s *RPCServer) PingNodeRPC(pi Ping, po *Pong) error {
-	log.Printf("PING from node %s\n", pi.Node.ID)
+	log.Printf("PING from node %s at %s\n", pi.Node.ID, pi.Node.Address)
 	*po = Pong{
 		NodeList: s.App.GetFullNodeList(),
 	}

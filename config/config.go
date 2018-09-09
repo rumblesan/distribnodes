@@ -9,6 +9,7 @@ import (
 // AppConfig holds the configuration for the application
 type AppConfig struct {
 	PingDuration time.Duration
+	TimeToLive   time.Duration
 	NodePort     int
 	InitialNodes []string
 }
@@ -19,8 +20,10 @@ func Get() *AppConfig {
 		Nodes    []string `arg:"positional"`
 		Port     int      `arg:"-P,required"`
 		PingTime int
+		TTL      int
 	}
 	args.PingTime = 30
+	args.TTL = 35
 
 	arg.MustParse(&args)
 
@@ -28,5 +31,6 @@ func Get() *AppConfig {
 		PingDuration: time.Duration(args.PingTime) * time.Second,
 		NodePort:     args.Port,
 		InitialNodes: args.Nodes,
+		TimeToLive:   time.Duration(args.TTL) * time.Second,
 	}
 }
