@@ -2,6 +2,22 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:300c0d22047b2fa7c4a9cd4c9cc2ca5a6e941fdcd320c54a54626dbfb86d2a5f"
+  name = "github.com/alexflint/go-arg"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "f7c0423bd11ee80ab81d25c6d46f492998af8547"
+
+[[projects]]
+  branch = "master"
+  digest = "1:e36bd4aac23f7b8cafe074ed789b89d673f88d14443a230d3982a694704d121b"
+  name = "github.com/alexflint/go-scalar"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "e80c3b7ed292b052c7083b6fd7154a8422c33f65"
+
+[[projects]]
   digest = "1:8a3e7525dc0cf0236b163166800ecbc78d6c8c5d7ac956996e7b3bef8cfadc41"
   name = "github.com/segmentio/ksuid"
   packages = ["."]
@@ -12,6 +28,9 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/segmentio/ksuid"]
+  input-imports = [
+    "github.com/alexflint/go-arg",
+    "github.com/segmentio/ksuid",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

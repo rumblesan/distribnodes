@@ -3,6 +3,7 @@ package types
 
 import (
 	"fmt"
+	"net/rpc"
 	"time"
 )
 
@@ -12,22 +13,13 @@ type DistribNode struct {
 	Address string
 }
 
-// Copy makes a copy of a DistribNode
-func (n DistribNode) Copy() DistribNode {
-	return DistribNode{ID: n.ID, Address: n.Address}
-}
-
 func (n DistribNode) String() string {
 	return fmt.Sprintf("Node %s at %s", n.ID, n.Address)
 }
 
 // NodeState tracks the state of a remote DistribNode
 type NodeState struct {
-	Node DistribNode
-	Seen time.Time
-}
-
-// AppConfig holds the configuration for the application
-type AppConfig struct {
-	PingDuration time.Duration
+	Node   *DistribNode
+	Seen   time.Time
+	Client *rpc.Client
 }
